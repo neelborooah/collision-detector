@@ -34,6 +34,12 @@ Bullet.prototype.render = function() {
         
     this.x_pos += Math.cos(this.angle) * distance_travelled;
     this.y_pos += Math.sin(this.angle) * distance_travelled;
+
+    if(this.y_pos <= 0 || this.y_pos >= window.innerHeight) {
+        this.angle = -this.angle;
+        this.y_pos += Math.sin(this.angle) * distance_travelled;
+    }
+
     this.timestamp = timestamp; 
     var style = "top:"+this.y_pos+";left:"+this.x_pos; 
     var htmlString = "<div class='bullet' style="+style+">&nbsp;</div>";
