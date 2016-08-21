@@ -2,6 +2,7 @@ var default_speed = 0.1; //pixels per millisecond
 
 var store = {
     gun: null,
+    target: null,
     bullets: [],
 };
 
@@ -46,12 +47,31 @@ Bullet.prototype.render = function() {
     return htmlString;
 }
 
+function Target(x_pos, y_pos, width, height, angle) {
+    this.x_pos = x_pos;
+    this.y_pos = y_pos;
+    this.width = width;
+    this.height = height;
+    this.angle = angle;
+}
+
+Target.prototype.render = function() {
+    var style = 
+        "width:"+this.width+
+        ";height:"+this.height+
+        ";top:"+this.y_pos+
+        ";left:"+this.x_pos;
+    var htmlString = "<div class='target' style="+style+">&nbsp;</div>";    
+    return htmlString;
+}
+
 function draw() {
     var elements = store.gun.render(); 
+    
+    elements += store.target.render();
 
     store.bullets = store.bullets.filter(function(bullet) {
-        return (bullet.x_pos >= 0 && bullet.x_pos <= window.innerWidth
-                && bullet.y_pos >= 0 && bullet.y_pos <= window.innerHeight);
+        return (bullet.x_pos >= 0 && bullet.x_pos <= window.innerWidth);
     });
 
     store.bullets.forEach(function(bullet) {
@@ -65,6 +85,8 @@ $(document).ready(function() {
         gun = new Gun(0, 30, gun_height, "gun_1");
     
     store.gun = gun;
+
+    store.target = new Target(window.innerWidth - 60, 30, 20, 60, 0);
 
     $("#canvas").on("mousemove", function(e) {
         var dist_x = e.clientX - store.gun.x_pos,
@@ -86,7 +108,6 @@ $(document).ready(function() {
                 new Date().getTime()
         );
         store.bullets.push(bullet);
-        console.log(bullet);
     });
 
     window.setInterval(function() {
