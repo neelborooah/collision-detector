@@ -1,4 +1,4 @@
-var default_speed = 0.1; //pixels per millisecond
+var default_speed = 0.8; //pixels per millisecond
 
 var store = {
     gun: null,
@@ -108,6 +108,39 @@ $(document).ready(function() {
                 new Date().getTime()
         );
         store.bullets.push(bullet);
+  
+        var x_dist = store.target.x_pos - bullet.x_pos;
+            distance_travelled = x_dist / Math.cos(bullet.angle),
+            y_dist = x_dist * Math.tan(bullet.angle),
+            max_y = window.innerHeight - store.gun.y_pos,
+            final_y = 0;
+       
+        var y_val = y_dist % max_y; 
+        
+        var divider = Math.floor(Math.abs(y_dist / max_y)) - 1;
+        if(divider === -1) final_y = store.gun.y_pos + y_val;
+        else if(divider % 2 === 0) {
+            var angle = (divider % 4 === 0)?bullet.angle: (-bullet.angle);
+            if(angle < 0) {
+                final_y = Math.abs(y_val);
+            } else {
+                final_y = window.innerHeight - Math.abs(y_val);
+            }
+        } else {
+            var angle = ((divider-1) % 4 === 0)?-bullet.angle:bullet.angle;
+            console.log(bullet.angle, angle);
+            if(angle > 0) final_y = store.gun.y_pos + Math.abs(y_val);
+            else final_y = store.gun.y_pos - Math.abs(y_val);
+        }
+
+        console.log(
+               "max height:", max_y,
+               "height travelled:", y_dist,
+               "height after mod:", y_val,
+               "final_y:", final_y,
+               "divider:", divider
+        );
+
     });
 
     window.setInterval(function() {
