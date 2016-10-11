@@ -49,16 +49,26 @@ Target.prototype.move = function() {
 
 Target.prototype.isImpact = function(bullet, gun) {
     
-    var final_y = this.finalY(bullet, gun);
+    var x_pos = this.x_pos;
 
-    var is_impact = (final_y >= this.y_pos && final_y <= this.y_pos + this.height);
+    while(x_pos <= this.x_pos + this.width) {
 
-    return is_impact;
+        var final_y = this.finalY(bullet, gun, x_pos);
+
+        var is_impact = (final_y >= this.y_pos && final_y <= this.y_pos + this.height);
+        
+        if(is_impact) return true;
+
+        x_pos += 1;
+    }
+
+
+    return false;
 }
 
 Target.prototype.preferredDirection = function(bullet, gun) {
 
-    var final_y = this.finalY(bullet, gun);
+    var final_y = this.finalY(bullet, gun, this.x_pos);
 
     var difference_top = Math.abs(this.y_pos - final_y);
     var difference_bottom = Math.abs(this.y_pos + this.height - final_y);
@@ -74,8 +84,8 @@ Target.prototype.preferredDirection = function(bullet, gun) {
 
 }
 
-Target.prototype.finalY = function(bullet, gun) {
-    var x_dist = this.x_pos - bullet.x_pos,
+Target.prototype.finalY = function(bullet, gun, x_pos) {
+    var x_dist = x_pos - bullet.x_pos,
         y_dist = x_dist * Math.tan(bullet.angle) + (bullet.y_pos - gun.y_pos),
         max_y = window.innerHeight - gun.y_pos,
         final_y = 0;
