@@ -1,6 +1,5 @@
 function Alfred(gun, target) {
 	//initialize brain
-	this.bias = null;
 }
 
 Alfred.prototype.decide = function(gun, target) {
@@ -19,9 +18,7 @@ Alfred.prototype.decide = function(gun, target) {
 
 	if(is_impact) {
 		result = target.preferredDirection(gun, impacting_bullet);
-	} else {
-		this.bias = null;
-	}
+	} 
 
 	return result;
 }
