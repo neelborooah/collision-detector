@@ -17,6 +17,8 @@ Gun.prototype.render = function() {
     var style = "top:"+this.y_pos+";left:"+this.x_pos+";transform:rotate("+angle_in_deg+"deg)";
     var htmlString = "<div id="+this.id+" class='gun' style="+style+">&nbsp;</div>";
 
+    this.filterBullets();
+
     this.bullets.forEach(function(bullet) {
         htmlString += bullet.render();
     });
@@ -24,8 +26,15 @@ Gun.prototype.render = function() {
     return htmlString;
 }
 
-Gun.prototype.shoot = function(x_pos, y_pos, angle, speed, start_time) {
-    var bullet = new Bullet(x_pos, y_pos, angle, speed, start_time);
+Gun.prototype.shoot = function(speed) {
+    var bullet = new Bullet(
+        this.x_pos+10, 
+        this.y_pos+6, 
+        this.angle, 
+        speed, 
+        new Date().getTime()
+    );
+    
     this.bullets.push(bullet);
 
     return bullet;

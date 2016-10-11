@@ -39,8 +39,6 @@ Target.prototype.move = function() {
 
         default: return;
     }
-    console.log(time_elapsed, timestamp, this.active_move.timestamp);
-    // console.log(this.y_pos, y_pos, time_elapsed, timestamp, this.active_move.move, distance_travelled);
 
     if(y_pos < 0) y_pos = 0;
     else if(y_pos + this.height > window.innerHeight) y_pos = window.innerHeight - this.height;
@@ -50,13 +48,39 @@ Target.prototype.move = function() {
 }
 
 Target.prototype.isImpact = function(bullet, gun) {
-    var x_dist = this.x_pos - bullet.x_pos;
-        distance_travelled = x_dist / Math.cos(bullet.angle),
-        y_dist = x_dist * Math.tan(bullet.angle),
+    
+    var final_y = this.finalY(bullet, gun);
+
+    var is_impact = (final_y >= this.y_pos && final_y <= this.y_pos + this.height);
+
+    return is_impact;
+}
+
+Target.prototype.preferredDirection = function(bullet, gun) {
+
+    var final_y = this.finalY(bullet, gun);
+
+    var difference_top = Math.abs(this.y_pos - final_y);
+    var difference_bottom = Math.abs(this.y_pos + this.height - final_y);
+
+
+    if(difference_top > difference_bottom) {
+        if(this.y_pos - difference_bottom >= 0) return "UP";
+        else return "DOWN";
+    } else {
+        if(this.y_pos + this.height + difference_top <= window.innerHeight) return "DOWN";
+        else return "UP";
+    }
+
+}
+
+Target.prototype.finalY = function(bullet, gun) {
+    var x_dist = this.x_pos - bullet.x_pos,
+        y_dist = x_dist * Math.tan(bullet.angle) + (bullet.y_pos - gun.y_pos),
         max_y = window.innerHeight - gun.y_pos,
         final_y = 0;
        
-    var y_val = y_dist % max_y; 
+    var y_val = (y_dist % max_y); 
         
     var divider = Math.floor(Math.abs(y_dist / max_y)) - 1;
     if(divider === -1) final_y = gun.y_pos + y_val;
@@ -73,18 +97,7 @@ Target.prototype.isImpact = function(bullet, gun) {
         else final_y = gun.y_pos - Math.abs(y_val);
     }
 
-    var is_impact = (final_y >= this.y_pos && final_y <= this.y_pos + this.height);
-
-    console.log(
-        "max height:", max_y,
-        "height travelled:", y_dist,
-        "height after mod:", y_val,
-        "final_y:", final_y,
-        "divider:", divider,
-        "is_impact:", is_impact
-    );
-
-    return is_impact;
+    return final_y;
 }
 
 Target.prototype.render = function() {
