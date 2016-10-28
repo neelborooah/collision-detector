@@ -20,6 +20,32 @@ Target.prototype.setActiveMove = function(new_move) {
     }
 }
 
+Target.prototype.finalY = function(bullet, gun, x_pos) {
+    var x_dist = x_pos - bullet.x_pos,
+        y_dist = x_dist * Math.tan(bullet.angle) + (bullet.y_pos - gun.y_pos),
+        max_y = window.innerHeight - gun.y_pos,
+        final_y = 0;
+       
+    var y_val = (y_dist % max_y); 
+        
+    var divider = Math.floor(Math.abs(y_dist / max_y)) - 1;
+    if(divider === -1) final_y = gun.y_pos + y_val;
+    else if(divider % 2 === 0) {
+        var angle = (divider % 4 === 0)?bullet.angle: (-bullet.angle);
+        if(angle < 0) {
+            final_y = Math.abs(y_val);
+        } else {
+            final_y = window.innerHeight - Math.abs(y_val);
+        }
+    } else {
+        var angle = ((divider-1) % 4 === 0)?-bullet.angle:bullet.angle;
+        if(angle > 0) final_y = gun.y_pos + Math.abs(y_val);
+        else final_y = gun.y_pos - Math.abs(y_val);
+    }
+
+    return final_y;
+}
+
 Target.prototype.move = function() {
 
     var timestamp = new Date().getTime();
@@ -84,30 +110,32 @@ Target.prototype.preferredDirection = function(bullet, gun) {
 
 }
 
-Target.prototype.finalY = function(bullet, gun, x_pos) {
-    var x_dist = x_pos - bullet.x_pos,
-        y_dist = x_dist * Math.tan(bullet.angle) + (bullet.y_pos - gun.y_pos),
-        max_y = window.innerHeight - gun.y_pos,
-        final_y = 0;
-       
-    var y_val = (y_dist % max_y); 
-        
-    var divider = Math.floor(Math.abs(y_dist / max_y)) - 1;
-    if(divider === -1) final_y = gun.y_pos + y_val;
-    else if(divider % 2 === 0) {
-        var angle = (divider % 4 === 0)?bullet.angle: (-bullet.angle);
-        if(angle < 0) {
-            final_y = Math.abs(y_val);
-        } else {
-            final_y = window.innerHeight - Math.abs(y_val);
+Target.prototype.firstToImpact = function(gun) {
+
+    var firstToImpact = null,
+        impactDistance = null;
+
+    for(var i in gun.bullets) {
+
+        var bullet = gun.bullets[i];
+
+        if(this.isImpact(bullet, gun)) {
+
+            var dist = this.x_pos - bullet.x_pos;
+
+            if(impactDistance == null || dist < impactDistance) {
+
+                firstToImpact = bullet;
+                impactDistance = dist;
+
+            }
+
         }
-    } else {
-        var angle = ((divider-1) % 4 === 0)?-bullet.angle:bullet.angle;
-        if(angle > 0) final_y = gun.y_pos + Math.abs(y_val);
-        else final_y = gun.y_pos - Math.abs(y_val);
+
     }
 
-    return final_y;
+    return firstToImpact;
+
 }
 
 Target.prototype.render = function() {

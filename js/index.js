@@ -1,5 +1,6 @@
 var default_speed = 0.8; //pixels per millisecond
 var dom_node_id = "#canvas";
+var interval = 15;
 
 var store = {
     gun: null,
@@ -56,7 +57,7 @@ $(document).ready(function() {
 
     store.painter = new Painter(dom_node_id);
 
-    store.alfred = new Alfred();
+    store.alfred = new Alfred(interval);
 
     store.summary = new Summary();
 
@@ -64,14 +65,14 @@ $(document).ready(function() {
 
     window.setInterval(function() {
 
-        store.summary.update(store.gun, store.target);
-        
         store.painter.draw(store.gun, store.target, store.summary);
+        
+        store.summary.update(store.gun, store.target);
 
         var move = store.alfred.decide(store.gun, store.target);
 
         store.target.setActiveMove(move);
 
-    }, 15);
+    }, interval);
 });
 

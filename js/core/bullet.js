@@ -6,9 +6,8 @@ function Bullet(x_pos, y_pos, angle, speed, timestamp) {
     this.timestamp = timestamp;
 }
 
-Bullet.prototype.move = function() {
-    var timestamp = new Date().getTime()
-        time_elapsed = timestamp - this.timestamp,
+Bullet.prototype.move = function(timestamp) {
+    var time_elapsed = timestamp - this.timestamp,
         distance_travelled = time_elapsed * this.speed; //pixels
         
     this.x_pos += Math.cos(this.angle) * distance_travelled;
@@ -23,7 +22,7 @@ Bullet.prototype.move = function() {
 }
 
 Bullet.prototype.render = function() {
-    this.move();
+    this.move(new Date().getTime());
     
     var style = "top:"+this.y_pos+";left:"+this.x_pos; 
     var htmlString = "<div class='bullet' style="+style+">&nbsp;</div>";

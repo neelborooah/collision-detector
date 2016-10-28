@@ -1,24 +1,20 @@
-function Alfred(gun, target) {
+function Alfred(interval) {
 	//initialize brain
+
+	this.interval = interval;
 }
 
 Alfred.prototype.decide = function(gun, target) {
-	var is_impact = false;
-	var impacting_bullet = null;
-	for(var id in gun.bullets) {
+	
+	var impacting_bullet = target.firstToImpact(gun);
 
-		is_impact = target.isImpact(gun.bullets[id], gun);
+	if(impacting_bullet != null) {
+		
+		var result = target.preferredDirection(gun, impacting_bullet);
 
-		impacting_bullet = gun.bullets[id];
+		return result; 
 
-		if(is_impact) break;
-	}
-
-	var result = null;
-
-	if(is_impact) {
-		result = target.preferredDirection(gun, impacting_bullet);
 	} 
 
-	return result;
+	return null;
 }
