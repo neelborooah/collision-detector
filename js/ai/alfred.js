@@ -1,20 +1,24 @@
-function Alfred(interval) {
-	//initialize brain
+export default class Alfred {
 
-	this.interval = interval;
-}
+	constructor(interval) {
+		//initialize brain
 
-Alfred.prototype.decide = function(gun, target) {
-	
-	var impacting_bullet = target.firstToImpact(gun);
+		this.interval = interval;
+	}
 
-	if(impacting_bullet != null) {
+	decide(gun, target) {
 		
-		var result = target.preferredDirection(gun, impacting_bullet);
+		var impacting_bullet = target.firstToImpact(gun);
 
-		return result; 
+		if(impacting_bullet != null) {
+			
+			var result = target.preferredDirection(gun, impacting_bullet);
 
-	} 
+			return result; 
 
-	return null;
+		} 
+
+		return null;
+	}
 }
+

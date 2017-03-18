@@ -1,3 +1,6 @@
+import { Bullet, Gun, Painter, Summary, Target } from './core';
+import { Alfred } from './ai';
+
 var default_speed = 0.8; //pixels per millisecond
 var dom_node_id = "#canvas";
 var interval = 15;
@@ -48,7 +51,7 @@ function initializeListeners() {
 }
 
 $(document).ready(function() {
-    var gun_height = Math.round(window.innerHeight/2),
+    let gun_height = Math.round(window.innerHeight/2),
         gun = new Gun(0, 30, gun_height, "gun_1");
     
     store.gun = gun;
@@ -69,7 +72,7 @@ $(document).ready(function() {
         
         store.summary.update(store.gun, store.target);
 
-        var move = store.alfred.decide(store.gun, store.target);
+        let move = store.alfred.decide(store.gun, store.target);
 
         store.target.setActiveMove(move);
 
