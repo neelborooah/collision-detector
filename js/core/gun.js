@@ -11,23 +11,9 @@ export default class Gun {
     }
 
     filterBullets() {
-        this.bullets = this.bullets.filter(function(bullet) {
-            return (bullet.x_pos >= 0 && bullet.x_pos <= window.innerWidth);
+        this.bullets = this.bullets.filter(bullet => {
+            return bullet.x_pos >= 0 && bullet.x_pos <= window.innerWidth;
         });
-    }
-
-    render() {
-        var angle_in_deg = this.angle * (180/Math.PI);
-        var style = "top:"+this.y_pos+";left:"+this.x_pos+";transform:rotate("+angle_in_deg+"deg)";
-        var htmlString = "<div id="+this.id+" class='gun' style="+style+">&nbsp;</div>";
-
-        this.filterBullets();
-
-        this.bullets.forEach(function(bullet) {
-            htmlString += bullet.render();
-        });
-
-        return htmlString;
     }
 
     shoot(speed) {
@@ -43,4 +29,19 @@ export default class Gun {
 
         return bullet;
     }
+ 
+    render() {
+        var angle_in_deg = this.angle * (180/Math.PI);
+        var style = "top:"+this.y_pos+";left:"+this.x_pos+";transform:rotate("+angle_in_deg+"deg)";
+        var htmlString = "<div id="+this.id+" class='gun' style="+style+">&nbsp;</div>";
+
+        this.filterBullets();
+
+        this.bullets.forEach(bullet => {
+            htmlString += bullet.render();
+        });
+
+        return htmlString;
+    }
+
 }

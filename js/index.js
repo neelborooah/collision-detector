@@ -42,7 +42,7 @@ $(document).ready(function() {
 
     store.painter = new Painter(dom_node_id);
 
-    store.alfred = new Alfred(interval);
+    store.alfred = new Alfred();
 
     store.summary = new Summary();
 

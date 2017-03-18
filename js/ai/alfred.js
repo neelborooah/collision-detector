@@ -1,11 +1,5 @@
 export default class Alfred {
 
-	constructor(interval) {
-		//initialize brain
-
-		this.interval = interval;
-	}
-
 	decide(gun, target) {
 		
 		var impacting_bullet = target.firstToImpact(gun);
