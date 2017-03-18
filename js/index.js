@@ -30,24 +30,6 @@ function initializeListeners() {
         store.target.isImpact(bullet, store.gun);  
     });
 
-    $(document).on("keydown", function(e) {
-        var move = null;
-        switch(e.which) {
-            case 38: move = "UP";
-            break;
-            case 40: move = "DOWN";
-            break;
-        }
-
-        store.target.setActiveMove(move);
-
-        e.preventDefault();
-    });
-
-    $(document).on("keyup", function(e) {
-        store.target.setActiveMove(null);
-        e.preventDefault();
-    });
 }
 
 $(document).ready(function() {
