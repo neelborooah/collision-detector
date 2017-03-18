@@ -5,7 +5,7 @@ module.exports = {
   ],
   output: {
     path: __dirname,
-    filename: "app.js"
+    filename: "dist/app.js"
   }, 
   module: {
     loaders: [
