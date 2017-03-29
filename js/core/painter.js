@@ -6,7 +6,7 @@ export default class Painter {
 
     draw(gun, target, summary) {
 
-        var elements = "";
+        let elements = "";
 
         if(summary.active) {
 

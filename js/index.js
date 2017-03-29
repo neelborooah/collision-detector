@@ -1,40 +1,33 @@
 import { Bullet, Gun, Painter, Summary, Target } from './core';
 import { Alfred } from './ai';
 
-var default_speed = 0.8; //pixels per millisecond
-var dom_node_id = "#canvas";
-var interval = 15;
+const default_speed = 0.8; //pixels per millisecond
+const dom_node_id = "#canvas";
+const interval = 15;
 
-var store = {
+let store = {
     gun: null,
     target: null,
     painter: null,
     alfred: null,
-    summary: null
+    summary: null,
 };
 
 function initializeListeners() {
-    $(dom_node_id).on("mousemove", function(e) {
-        var dist_x = e.clientX - store.gun.x_pos,
-            dist_y = e.clientY - store.gun.y_pos,
-            angle = Math.atan(dist_y/dist_x);
-
-        store.gun.angle = angle;
+    $(dom_node_id).on("mousemove", e => {
+        if(!store.summary.autoplay) store.gun.adjustOrientation(e.clientX, e.clientY);
     });
 
-    $(dom_node_id).on("click", function(e) {
-        var dist_x = e.clientX - store.gun.x_pos,
-            dist_y = e.clientY - store.gun.y_pos;
-
-        var bullet = store.gun.shoot(default_speed);
-        store.target.isImpact(bullet, store.gun);  
-    });
+    $(dom_node_id).on("click", e => {
+        if(e.clientX < 300 && e.clientY < 300) store.summary.toggleAutoplay();
+        else if(!store.summary.autoplay) store.gun.shoot();
+    });  
 
 }
 
-$(document).ready(function() {
+$(document).ready(() => {
     let gun_height = Math.round(window.innerHeight/2),
-        gun = new Gun(0, 30, gun_height, "gun_1");
+        gun = new Gun(0, 30, gun_height, "gun_1", default_speed);
     
     store.gun = gun;
 
@@ -48,16 +41,26 @@ $(document).ready(function() {
 
     initializeListeners();
 
-    window.setInterval(function() {
+    window.setInterval(() => {
 
         store.painter.draw(store.gun, store.target, store.summary);
-        
+
         store.summary.update(store.gun, store.target);
 
-        let move = store.alfred.decide(store.gun, store.target);
+        let target_move = store.alfred.decideTargetMove(store.gun, store.target);
 
-        store.target.setActiveMove(move);
+        store.target.setActiveMove(target_move);
 
     }, interval);
+
+    window.setInterval(() => {
+
+        if(store.summary.autoplay) {
+            const move = store.alfred.decideGunMove(store.gun, store.target);
+            store.gun.adjustOrientation(move.gun_x_pos, move.gun_y_pos);
+            if(move.is_shoot) store.gun.shoot();
+        }
+
+    }, interval * 40);
 });
 

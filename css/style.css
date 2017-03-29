@@ -60,3 +60,12 @@ body {
     left: 30px;
     top: 30px;
 }
+.simple-text,
+.simple-text:hover,
+.simple-text:active {
+    text-decoration: none;
+    color: white;
+}
+.margin-left {
+    margin-left: 15px;
+}
