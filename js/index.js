@@ -19,13 +19,14 @@ function initializeListeners() {
     });
 
     $(dom_node_id).on("click", e => {
-        if(e.clientX < 300 && e.clientY < 300) store.summary.toggleAutoplay();
+        if(!store.summary.active) initializeActors();
+        else if(e.clientX < 300 && e.clientY < 300) store.summary.toggleAutoplay();
         else if(!store.summary.autoplay) store.gun.shoot();
     });  
 
 }
 
-$(document).ready(() => {
+function initializeActors() {
     let gun_height = Math.round(window.innerHeight/2),
         gun = new Gun(0, 30, gun_height, "gun_1", default_speed);
     
@@ -38,6 +39,11 @@ $(document).ready(() => {
     store.alfred = new Alfred();
 
     store.summary = new Summary();
+}
+
+$(document).ready(() => {
+    
+    initializeActors();
 
     initializeListeners();
 
