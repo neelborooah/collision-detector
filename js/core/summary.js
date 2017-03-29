@@ -6,6 +6,7 @@ export default class Summary {
         this.active = true;
         this.end_time = null;
         this.autoplay = false;
+        this.max_score = 2;
     }
 
     update(gun, target) {
@@ -44,7 +45,7 @@ export default class Summary {
 
         if(this.active) {
             htmlString =    `<div class='summary'>
-                                <span>${this.score}</span>
+                                <span>${this.score}/${this.max_score}</span>
                                 <span class="simple-text margin-left">Autoplay: ${this.autoplay ? "on" : "off"}</span>
                             </div>`;
         } else {
