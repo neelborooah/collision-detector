@@ -20,7 +20,7 @@ function initializeListeners() {
 
     $(dom_node_id).on("click", e => {
         if(!store.summary.active) window.setTimeout(() => initializeActors(), 2000);
-        else if(e.clientX < 300 && e.clientY < 300) store.summary.toggleAutoplay();
+        else if(e.clientX < 200 && e.clientY < 75) store.summary.toggleAutoplay();
         else if(!store.summary.autoplay) store.gun.shoot();
     });  
 
